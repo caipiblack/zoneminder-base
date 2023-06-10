@@ -214,6 +214,7 @@ RUN set -x \
         nginx \
         php-fpm \
         tzdata \
+        i965-va-driver vainfo \
     && rm -rf /var/lib/apt/lists/*
 
 # Remove rsyslog as its unneeded and hangs the container on shutdown
@@ -264,7 +265,11 @@ RUN set -x \
         /zoneminder \
         /log \
     && chown -R nobody:nogroup \
-        /log
+        /log \
+    && echo "Creating render group" \
+    && groupadd -g 109 render \
+    && echo "Adding www-data to render group" \
+    && usermod -a -G render www-data
 
 # System Variables
 ENV \
